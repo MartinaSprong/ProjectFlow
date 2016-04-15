@@ -18,7 +18,8 @@ define('SCOPES', implode(' ', array(
 class DefaultController extends Controller
 {
 
-    function getClient() {
+    function getClient()
+    {
         $client = new \Google_Client();
         $client->setApplicationName(APPLICATION_NAME);
         $client->setScopes(SCOPES);
@@ -45,7 +46,7 @@ class DefaultController extends Controller
             $accessToken = $client->authenticate($authCode);
 
             // Store the credentials to disk.
-            if(!file_exists(dirname($credentialsPath))) {
+            if (!file_exists(dirname($credentialsPath))) {
                 mkdir(dirname($credentialsPath), 0700, true);
             }
             file_put_contents($credentialsPath, $accessToken);
@@ -66,7 +67,8 @@ class DefaultController extends Controller
      * @param string $path the path to expand.
      * @return string the expanded path.
      */
-    function expandHomeDirectory($path) {
+    function expandHomeDirectory($path)
+    {
         $homeDirectory = getenv('HOME');
         if (empty($homeDirectory)) {
             $homeDirectory = getenv("HOMEDRIVE") . getenv("HOMEPATH");
@@ -78,7 +80,8 @@ class DefaultController extends Controller
      * @Route("/", name="")
      *
      */
-    function indexAction(){
+    function indexAction()
+    {
         // Get the API client and construct the service object.
         $client = $this->getClient();
         $service = new \Google_Service_Calendar($client);
@@ -134,12 +137,78 @@ class DefaultController extends Controller
         ));
 
         $calendarId = 'primary';
-        $event = $service->events->insert($calendarId, $event);
+//        $event = $service->events->insert($calendarId, $event);
 
         $events = $service->events->listEvents('primary');
 
+        $createDates = [];
+        $endDates = [];
+
+        $myEvents = [];
+
+        $number = 0;
+
+        foreach ($events as $event) {
+
+            $number++;
+
+            if (array_key_exists('end', $event['modelData'])) {
+                {
+                    if (array_key_exists('dateTime', $event['modelData']['end']) || array_key_exists('date', $event['modelData']['end']))
+
+                        if (array_key_exists('dateTime', $event['modelData']['end'])) {
+                            $endTimeStamp = substr($event['modelData']['end']['dateTime'],0,10);
+                        }
+                    if (array_key_exists('date', $event['modelData']['end'])) {
+                        $endTimeStamp = substr($event['modelData']['end']['date'],0,10);
+                    }
+
+
+                    $startTimeStamp = substr($event->created,0,10);
+
+                    $newStartdate = date("d/m/Y",strtotime($startTimeStamp));
+                    $newEnddate = date("d/m/Y",strtotime($endTimeStamp));
+
+//                    $numberOfDays = $newEnddate - $newStartdate;
+//                    dump($numberOfDays ."+". $event->summary);
+
+                    $createDates[] = $newStartdate;
+                    $endDates[] = $newEnddate;
+                }
+            }
+
+            $myEvents['event'.$number] = $event->summary;
+            $myEvents['startDate'.$number] = $newStartdate;
+            $myEvents['endDate'.$number] = $newEnddate;
+        }
+
+
+
+        $currentDate = date("d-m-Y");
+
         return $this->render('default/index.html.twig', array(
             'events' => $events,
+            'myEvents' => $myEvents,
+        ));
+    }
+
+    /**
+     * @Route("/number", name="number")
+     */
+    function calculateRemainingTimeAction()
+    {
+        $startTimeStamp = strtotime("2011/07/01");
+        $endTimeStamp = strtotime("2011/07/17");
+
+        $timeDiff = abs($endTimeStamp - $startTimeStamp);
+
+        $numberDays = $timeDiff / 86400;  // 86400 seconds in one day
+
+        // and you might want to convert to integer
+        $numberDays = intval($numberDays);
+
+        return $this->render('default/index.html.twig', array(
+            'numberDays' => $numberDays,
         ));
     }
 }
