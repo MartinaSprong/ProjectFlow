@@ -3,8 +3,8 @@
 {% block body %}
 
     {% for event in myEvents %}
-        <div>{{ dump(event) }}</div>
-        {#<div>{{ event.event }}</div>#}
+        {#<div>{{ dump(event) }}</div>#}
+        <div>{{ event.summary }}</div>
     {% endfor %}
     {#<div>{{ dump(numberDays) }}</div>#}
 
