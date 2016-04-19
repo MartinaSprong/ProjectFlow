@@ -89,7 +89,7 @@ class DefaultController extends Controller
         // Print the next 10 events on the user's calendar.
         $calendarId = 'primary';
         $optParams = array(
-            'maxResults' => 8,
+            'maxResults' => 20,
             'orderBy' => 'startTime',
             'singleEvents' => TRUE,
             'timeMin' => date('c'),
@@ -106,13 +106,9 @@ class DefaultController extends Controller
         } else {
             print "Upcoming events:\n";
             foreach ($results->getItems() as $event) {
-//                dump($currentDate < (($event['modelData']['end'])));
-//                if($currentDate < (($event['modelData']['end']))){
-                    if (empty($start)) {
-//                        dump($currentDate < (($event['modelData']['end'])));
-                        $start = $event->start->date;
-                    }
-//                }
+                if (empty($start)) {
+                    $start = $event->start->date;
+                }
             }
         }
 
@@ -156,6 +152,7 @@ class DefaultController extends Controller
 
         $number = 0;
         $completed = 0;
+        $allCompleted = [];
 
         foreach ($results->getItems() as $event) {
 
@@ -166,32 +163,34 @@ class DefaultController extends Controller
                     if (array_key_exists('dateTime', $event['modelData']['end']) || array_key_exists('date', $event['modelData']['end']))
 
                         if (array_key_exists('dateTime', $event['modelData']['end'])) {
-                            $endTimeStamp = substr($event['modelData']['end']['dateTime'],0,10);
+                            $endTimeStamp = substr($event['modelData']['end']['dateTime'], 0, 10);
                         }
                     if (array_key_exists('date', $event['modelData']['end'])) {
-                        $endTimeStamp = substr($event['modelData']['end']['date'],0,10);
+                        $endTimeStamp = substr($event['modelData']['end']['date'], 0, 10);
                     }
 
-                    $startTimeStamp = substr($event->created,0,10);
+                    $startTimeStamp = substr($event->created, 0, 10);
 
                     $newStartdate = new \DateTime($startTimeStamp);
                     $newEnddate = new \DateTime($endTimeStamp);
 
-
                     $createDates[] = $newStartdate;
                     $endDates[] = $newEnddate;
-
 
                     $currentDate = new \DateTime();
 
                     $totalTime = $newStartdate->diff($newEnddate)->format("%d");
                     $difference = $currentDate->diff($newEnddate)->format("%d");
 
-                    if($difference > 0 && $totalTime > 0){
-                        $completed = ($difference/$totalTime) * 100;
+                    dump($event->summary);
+                    dump($totalTime);
+                    dump($difference);
+
+                    if ($difference > 0 && $totalTime > 0) {
+                        $completed = ($difference / $totalTime) * 100;
                     }
 
-                    if($completed > 100){
+                    if ($completed > 100) {
                         $completed = 100;
                     }
 
@@ -200,16 +199,25 @@ class DefaultController extends Controller
                 }
             }
 
-            $myEvents['event'.$number] = $event->summary;
-            $myEvents['startDate'.$number] = $newStartdate;
-            $myEvents['endDate'.$number] = $newEnddate;
-            $myEvents['completed'.$number] = $completed;
+            $myEvents['event' . $number] = $event->summary;
+            $myEvents['startDate' . $number] = $newStartdate;
+            $myEvents['endDate' . $number] = $newEnddate;
+            $myEvents['completed' . $number] = $completed;
 
+//            $endTimeStamp = substr($event['modelData']['end']['dateTime'], 0, 10);
+
+            $allCompleted[] = $completed;
         }
 
+        // naam,
+        // link naar trello,
+        // slagingskans = $completed
+        //einddatum = modelData->end->dateTime = newEndDate
+
         return $this->render('default/index.html.twig', array(
-            'events' => $events,
             'myEvents' => $results->getItems(),
+            'myCompleted' => $allCompleted,
+//            'endDate' => $endTimeStamp,
         ));
     }
 

@@ -1,12 +1,35 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    <nav>
+        <div class="nav-wrapper">
+            <a href="#" class="brand-logo">Logo</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a href="">Sass</a></li>
+                <li><a href="">Components</a></li>
+                <li><a href="">JavaScript</a></li>
+            </ul>
+        </div>
+    </nav>
 
-    {% for event in myEvents %}
-        {#<div>{{ dump(event) }}</div>#}
-        <div>{{ event.summary }}</div>
-    {% endfor %}
-    {#<div>{{ dump(numberDays) }}</div>#}
+    <div class="row">{% set counter = -1 %}
+        {% for event in myEvents %}
+            <div class="col s12 m6">
+                <div class="card blue-grey darken-1">
+
+                    {% set counter = counter + 1 %}
+                    <div class="card-content white-text">
+                        <span class="card-title">{{ event.summary }}</span>
+                        <p>{{ myCompleted[counter] }}%.</p>
+                    </div>
+                    <div class="card-action">
+                        <a href="#">This is a link</a>
+                        <a href="#">This is a link</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 
 {% endblock %}
 
