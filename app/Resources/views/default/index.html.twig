@@ -3,31 +3,40 @@
 {% block body %}
     <nav>
         <div class="nav-wrapper">
-            <a href="#" class="brand-logo">Logo</a>
+            <a href="#" class="brand-logo">
+                <i class="material-icons">today</i></a>
+                <span class="welcome">Welkom: {{ myName }}</span>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
-                <li><a href="">Sass</a></li>
-                <li><a href="">Components</a></li>
-                <li><a href="">JavaScript</a></li>
+                <li><a href="">Project</a></li>
+                <li><a href="">Google Calendar</a></li>
+                <li><a href="">Help</a></li>
             </ul>
         </div>
     </nav>
-
-    <div class="row">{% set counter = -1 %}
+    <div class="row">
+        {% set counter = -1 %}
+        <h2>Upcoming events</h2>
         {% for event in myEvents %}
-            <div class="col s12 m6">
-                <div class="card blue-grey darken-1">
+        <div class="col s12 m6">
+            <div class="card small">
+                {% set counter = counter + 1 %}
+                <div class="card-image">
+                    <img src="bundles/framework/images/Donald.jpg">
+                    <span class="card-title">{{ event.summary }}</span>
+                </div>
+                <div class="card-content">
 
-                    {% set counter = counter + 1 %}
-                    <div class="card-content white-text">
-                        <span class="card-title">{{ event.summary }}</span>
-                        <p>{{ myCompleted[counter] }}%.</p>
-                    </div>
-                    <div class="card-action">
-                        <a href="#">This is a link</a>
-                        <a href="#">This is a link</a>
-                    </div>
+                    <p>Chance of success: {{ myCompleted[counter] }}%.</p>
+                </div>
+                <div class="card-action">
+                    <a href="#">Visit event</a>
+                    <a href="#">Remove event</a>
+                    <span>End date:
+                        {{ endDate[counter]|date('d-m-Y') }}
+                    </span>
                 </div>
             </div>
+        </div>
         {% endfor %}
     </div>
 

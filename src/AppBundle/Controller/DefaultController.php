@@ -104,7 +104,7 @@ class DefaultController extends Controller
         if (count($results->getItems()) == 0) {
             print "No upcoming events found.\n";
         } else {
-            print "Upcoming events:\n";
+//            print "Upcoming events:\n";
             foreach ($results->getItems() as $event) {
                 if (empty($start)) {
                     $start = $event->start->date;
@@ -173,28 +173,25 @@ class DefaultController extends Controller
 
                     $newStartdate = new \DateTime($startTimeStamp);
                     $newEnddate = new \DateTime($endTimeStamp);
+//                    dump($newEnddate);
 
                     $createDates[] = $newStartdate;
                     $endDates[] = $newEnddate;
+
+                    dump($endDates);
 
                     $currentDate = new \DateTime();
 
                     $totalTime = $newStartdate->diff($newEnddate)->format("%d");
                     $difference = $currentDate->diff($newEnddate)->format("%d");
 
-                    dump($event->summary);
-                    dump($totalTime);
-                    dump($difference);
-
                     if ($difference > 0 && $totalTime > 0) {
-                        $completed = ($difference / $totalTime) * 100;
+                        $completed = round(($difference / $totalTime) * 100);
                     }
 
                     if ($completed > 100) {
                         $completed = 100;
                     }
-
-                    dump($completed);
 
                 }
             }
@@ -204,9 +201,11 @@ class DefaultController extends Controller
             $myEvents['endDate' . $number] = $newEnddate;
             $myEvents['completed' . $number] = $completed;
 
-//            $endTimeStamp = substr($event['modelData']['end']['dateTime'], 0, 10);
-
             $allCompleted[] = $completed;
+
+            $displayName = $event['modelData']['creator']['displayName'];
+//            $displayEndDate = $event['modelData']['end']['date'];
+//            dump($displayEndDate);
         }
 
         // naam,
@@ -217,7 +216,8 @@ class DefaultController extends Controller
         return $this->render('default/index.html.twig', array(
             'myEvents' => $results->getItems(),
             'myCompleted' => $allCompleted,
-//            'endDate' => $endTimeStamp,
+            'myName' => $displayName,
+            'endDate' => $endDates,
         ));
     }
 
