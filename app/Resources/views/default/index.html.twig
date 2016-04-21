@@ -2,12 +2,20 @@
 
 {% block body %}
     <nav>
+        <!-- Dropdown Structure -->
+        <ul id="dropdown1" class="dropdown-content">
+            <li><a href="#!">Project</a></li>
+            <li><a href="#!">Project</a></li>
+            <li class="divider"></li>
+            <li><a href="#!">Project</a></li>
+        </ul>
         <div class="nav-wrapper">
             <a href="#" class="brand-logo">
                 <i class="material-icons">today</i></a>
                 <span class="welcome">Welkom: {{ myName }}</span>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
-                <li><a href="">Project</a></li>
+                <!-- Dropdown Trigger -->
+                <li><a class="dropdown-button" href="#!" data-activates="dropdown1">Projects<i class="material-icons right">arrow_drop_down</i></a></li>
                 <li><a href="">Google Calendar</a></li>
                 <li><a href="">Help</a></li>
             </ul>
@@ -21,15 +29,16 @@
             <div class="card small">
                 {% set counter = counter + 1 %}
                 <div class="card-image">
-                    <img src="bundles/framework/images/Donald.jpg">
+                    <img src="bundles/framework/images/roeien.png">
                     <span class="card-title">{{ event.summary }}</span>
                 </div>
                 <div class="card-content">
 
-                    <p>Chance of success: {{ myCompleted[counter] }}%.</p>
+                    <p>Chance of success: {{ myCompleted[counter] }}%</p>
                 </div>
                 <div class="card-action">
-                    <a href="#">Visit event</a>
+                    {#<a href="https://www.google.com/calendar/event?eid={{ event.id }}">Visit event</a>#}
+                    <a href="https://calendar.google.com/calendar/render#eventpage_6%7Ceid-bmczZWlqOWZtOTZsaDgzbzQxYWdtcDJ1aGMgbWFydGluYXNwcm9uZzk0QG0-1-0-">Visit event</a>
                     <a href="#">Remove event</a>
                     <span>End date:
                         {{ endDate[counter]|date('d-m-Y') }}
@@ -40,8 +49,31 @@
         {% endfor %}
     </div>
 
+    <footer class="page-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col l6 s12">
+                    <h5 class="white-text">Contact us!</h5>
+                    <p class="grey-text text-lighten-4">Lorem ipsum </p>
+                </div>
+                <div class="col l4 offset-l2 s12">
+                    <h5 class="white-text">More info</h5>
+                    <ul>
+                        <li><a class="grey-text text-lighten-3" href="#!">Link 1</a></li>
+                        <li><a class="grey-text text-lighten-3" href="#!">Link 2</a></li>
+                        <li><a class="grey-text text-lighten-3" href="#!">Link 3</a></li>
+                        <li><a class="grey-text text-lighten-3" href="#!">Link 4</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <div class="container">
+                © 2016 Copyright Text
+                <a class="grey-text text-lighten-4 right" href="#!">More Links</a>
+            </div>
+        </div>
+    </footer>
+
 {% endblock %}
 
-{% block stylesheets %}
-
-{% endblock %}
