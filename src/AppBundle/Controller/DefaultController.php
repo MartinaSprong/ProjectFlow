@@ -96,15 +96,9 @@ class DefaultController extends Controller
         );
         $results = $service->events->listEvents($calendarId, $optParams);
 
-        $currentDate = date("d/m/Y");
-//        dump($results->getItems());
-
-        $fillArray = $results->getItems();
-
         if (count($results->getItems()) == 0) {
             print "No upcoming events found.\n";
         } else {
-//            print "Upcoming events:\n";
             foreach ($results->getItems() as $event) {
                 if (empty($start)) {
                     $start = $event->start->date;
@@ -145,9 +139,6 @@ class DefaultController extends Controller
 
         $events = $service->events->listEvents('primary');
 
-//        $createDates = [];
-//        $endDates = [];
-
         $myEvents = [];
 
         $number = 0;
@@ -173,7 +164,6 @@ class DefaultController extends Controller
 
                     $newStartdate = new \DateTime($startTimeStamp);
                     $newEnddate = new \DateTime($endTimeStamp);
-//                    dump($newEnddate);
 
                     $createDates[] = $newStartdate;
                     $endDates[] = $newEnddate;
@@ -204,8 +194,6 @@ class DefaultController extends Controller
             $allCompleted[] = $completed;
 
             $displayName = $event['modelData']['creator']['displayName'];
-//            $displayEndDate = $event['modelData']['end']['date'];
-//            dump($displayEndDate);
         }
 
         // naam,
@@ -220,5 +208,16 @@ class DefaultController extends Controller
             'endDate' => $endDates,
         ));
     }
+
+    /**
+     * @Route("/project", name="project")
+     *
+     */
+    function projectAction()
+    {
+
+        return $this->render('default/project.html.twig');
+    }
+
 
 }

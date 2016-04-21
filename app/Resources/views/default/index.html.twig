@@ -4,21 +4,23 @@
     <nav>
         <!-- Dropdown Structure -->
         <ul id="dropdown1" class="dropdown-content">
-            <li><a href="#!">Project</a></li>
-            <li><a href="#!">Project</a></li>
-            <li class="divider"></li>
-            <li><a href="#!">Project</a></li>
+            {% set counter = -1 %}
+            {% for event in myEvents %}
+            {% set counter = counter + 1 %}
+            <li><a href="{{ path('project') }}">{{ event.summary }}</a></li>
+            {% endfor %}
         </ul>
         <div class="nav-wrapper">
-            <a href="#" class="brand-logo">
+            <a href="{{ path('') }}" class="brand-logo">
                 <i class="material-icons">today</i></a>
                 <span class="welcome">Welkom: {{ myName }}</span>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
                 <!-- Dropdown Trigger -->
                 <li><a class="dropdown-button" href="#!" data-activates="dropdown1">Projects<i class="material-icons right">arrow_drop_down</i></a></li>
-                <li><a href="">Google Calendar</a></li>
-                <li><a href="">Help</a></li>
+                <li><a href="https://calendar.google.com/calendar/render#eventpage_6%7Ceid-bmczZWlqOWZtOTZsaDgzbzQxYWdtcDJ1aGMgbWFydGluYXNwcm9uZzk0QG0-1-0-">Google Calendar</a></li>
+                <li><a href="https://support.google.com/?hl=nl">Help</a></li>
             </ul>
+
         </div>
     </nav>
     <div class="row">
